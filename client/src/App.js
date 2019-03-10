@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
-
+import Images from './components/Images'
 class App extends Component {
   render() {
     return (
@@ -15,10 +15,7 @@ class App extends Component {
                   Infinite Scroll Unsplash Code Challenge
                 </h1>
               </div>>
-              <div className="images">
-                
-              </div>
-              
+              <Images></Images>
             </div>
           </div>
         </div>

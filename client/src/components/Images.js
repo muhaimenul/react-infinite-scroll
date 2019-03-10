@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import InfiniteScroll from 'react-infinite-scroll-component';
+import Image from './Image';
 
 class App extends Component {
     state = {
@@ -8,25 +9,31 @@ class App extends Component {
         count: 30,
         start: 1
     }
+    componentDidMount () {
+      const {count, start} = this.state;
+      axios.get(`api/images?count=${count}&start=${start}`)
+      .then(res => this.setState({images: res.data}))
+    }
+    
+    fetchImages = () => {
+      const {count, start} = this.state;
+        this.setState({start: this.state.start + count})
+        axios.get(`api/images?count=${count}&start=${start}`)
+        .then(res => this.setState({images: this.state.images.concat(res.data)}))
+    }
   render() {
     return (
-      <div id="root">
-        <div className="hero is-fullheight is-bold is-info">
-          <div className="hero-body">
-            <div className="container">
-              <div className="header content">
-                <h2 className="subtitle is-6">Code Challenge #16</h2>
-                <h1 className="title is-1">
-                  Infinite Scroll Unsplash Code Challenge
-                </h1>
-              </div>>
-              <div className="images">
-                
-              </div>
-              
-            </div>
-          </div>
-        </div>
+      <div className="images">
+          <InfiniteScroll
+            dataLength={this.state.images.length}
+            next={this.fetchImages}
+            hasMore={true}
+            loader={<h4>Loading...</h4>}
+          >
+            {this.state.images.map(image => (
+              <Image key={image.id} image={image} />
+            ))}
+          </InfiniteScroll>
       </div>
     );
   }
